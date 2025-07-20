@@ -1,9 +1,6 @@
-# app/candidate_engine.py
-
 import os
-import uuid
 from dotenv import load_dotenv
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 
 load_dotenv()
 
@@ -13,6 +10,12 @@ load_dotenv()
 client = MongoClient(os.getenv("MONGO_URI"))
 db = client["excelina"]
 candidates_col = db["candidates"]
+
+# Enforce unique email (add an index if not already done)
+try:
+    candidates_col.create_index("email", unique=True)
+except errors.DuplicateKeyError:
+    pass
 
 # ---------------------------
 # Register a new candidate
@@ -27,19 +30,20 @@ def register_candidate(name, email, role):
         "experienced": [2, 3, 4]
     }
 
-    candidate_id = str(uuid.uuid4())  # Unique ID for tracking
-
     candidate_doc = {
-        "candidate_id": candidate_id,
         "name": name,
         "email": email,
         "role": role,
         "allowed_levels": level_range[role],
-        "interview_progress": [],  # Will hold questions + scores per level
+        "interview_progress": [],
         "eliminated_at_level": None,
-        "status": "registered"  # Can be: registered, in_progress, eliminated, completed
+        "status": "registered"
     }
 
-    candidates_col.insert_one(candidate_doc)
-    print(f"[✅] Candidate '{name}' registered with ID: {candidate_id}")
-    return candidate_id
+    try:
+        result = candidates_col.insert_one(candidate_doc)
+        print(f"[✅] Candidate '{name}' registered with _id: {result.inserted_id}")
+        return result.inserted_id
+    except errors.DuplicateKeyError:
+        print(f"[❌] A candidate with email '{email}' already exists.")
+        return None

@@ -72,11 +72,10 @@ def generate_candidate_questions(level, n=10):
             q["reference_answer"],
             q.get("follow_up", "")
         )
-
         # Insert generated question back into seed pool
         seed_collection.insert_one({
-            "id": f"gen_{ObjectId()}",
             "level": level,
+            "question_type": "generated",
             "topic": q.get("topic", ""),
             "question": mod_q,
             "reference_answer": mod_ref,
@@ -86,13 +85,13 @@ def generate_candidate_questions(level, n=10):
 
         # Prepare question for candidate
         final_questions.append({
-            "original_id": str(q["_id"]),
+            "question_id": ObjectId(),
             "level": level,
+            "question_type": "generated",
             "topic": q.get("topic", ""),
             "generated_question": mod_q,
             "generated_reference_answer": mod_ref,
-            "follow_up": mod_fol,
-            "source": "generated"
+            "follow_up": mod_fol
         })
 
     return final_questions

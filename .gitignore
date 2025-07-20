@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# dotenv environment file
+.env
+
+# VSCode files
+.vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebooks (optional)
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Pytest cache
+.pytest_cache/
+
+# HuggingFace cache (optional)
+~/.cache/huggingface
+
+# MongoDB dump directories (if used)
+dump/
+
+# Testing file
+test.py
