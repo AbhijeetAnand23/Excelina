@@ -35,3 +35,6 @@ dump/
 
 # Testing file
 test.py
+
+# DeepEval
+.deepeval
