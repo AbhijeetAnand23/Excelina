@@ -2,6 +2,7 @@
   {
 
     "level": 1,
+    "question_type": "seed",
     "topic": "Cell Basics",
     "question": "What is a cell address in Excel?",
     "reference_answer": "A cell address identifies a cell by its column letter and row number, such as A1.",
@@ -11,6 +12,7 @@
   {
 
     "level": 1,
+    "question_type": "seed",
     "topic": "Cell Referencing",
     "question": "Explain the difference between relative and absolute cell referencing.",
     "reference_answer": "Relative references change when copied; absolute references (with $) stay constant.",
@@ -20,6 +22,7 @@
   {
 
     "level": 1,
+    "question_type": "seed",
     "topic": "Formulas vs Functions",
     "question": "What is the difference between a formula and a function in Excel?",
     "reference_answer": "A formula is user-defined (like =A1+A2), while a function is built-in, e.g., =SUM(A1:A10).",
@@ -29,6 +32,7 @@
   {
 
     "level": 1,
+    "question_type": "seed",
     "topic": "Order of Operations",
     "question": "What is the order of operations in Excel (PEMDAS/BODMAS)?",
     "reference_answer": "Excel uses Parentheses, Exponents, Multiplication/Division, then Addition/Subtraction.",
@@ -38,6 +42,7 @@
   {
 
     "level": 1,
+    "question_type": "seed",
     "topic": "Basic Functions",
     "question": "What does =SUM(A1:A5) do?",
     "reference_answer": "It adds the numeric values in cells A1 through A5.",
@@ -47,6 +52,7 @@
   {
 
     "level": 1,
+    "question_type": "seed",
     "topic": "Counting",
     "question": "Explain the difference between COUNT, COUNTA, and COUNTBLANK.",
     "reference_answer": "COUNT counts numbers, COUNTA counts non-empty, COUNTBLANK counts empty cells.",
@@ -56,6 +62,7 @@
   {
 
     "level": 1,
+    "question_type": "seed",
     "topic": "Freezing Panes",
     "question": "How do you freeze panes in Excel?",
     "reference_answer": "Use View → Freeze Panes to lock headers while scrolling.",
@@ -65,6 +72,7 @@
   {
 
     "level": 1,
+    "question_type": "seed",
     "topic": "Data Formats",
     "question": "Name three common data formats in Excel.",
     "reference_answer": "Number, text, date/time, and percentage are common formats.",
@@ -74,6 +82,7 @@
   {
 
     "level": 1,
+    "question_type": "seed",
     "topic": "Charting",
     "question": "How do you create a simple chart in Excel?",
     "reference_answer": "Select data and choose Insert → Chart (e.g., Column or Line).",
@@ -82,6 +91,7 @@
   },
   {
     "level": 1,
+    "question_type": "seed",
     "topic": "Ribbon",
     "question": "What is the Ribbon interface in Excel?",
     "reference_answer": "The Ribbon is the toolbar at the top, grouping commands into tabs.",
@@ -92,6 +102,7 @@
   {
 
     "level": 2,
+    "question_type": "seed",
     "topic": "Lookup",
     "question": "How does VLOOKUP work in Excel?",
     "reference_answer": "VLOOKUP searches for a value in the first column of a range and returns a value in another column of the same row.",
@@ -101,6 +112,7 @@
   {
 
     "level": 2,
+    "question_type": "seed",
     "topic": "Lookup",
     "question": "What is XLOOKUP and how is it better than VLOOKUP?",
     "reference_answer": "XLOOKUP allows searching in any direction and returns a result from any column without fixed index number.",
@@ -110,6 +122,7 @@
   {
 
     "level": 2,
+    "question_type": "seed",
     "topic": "Logic Functions",
     "question": "What does the IF function do in Excel?",
     "reference_answer": "IF checks a condition and returns one value if true, another if false.",
@@ -119,6 +132,7 @@
   {
 
     "level": 2,
+    "question_type": "seed",
     "topic": "Counting Conditions",
     "question": "Write a formula to count cells greater than 100 in range A1:A20.",
     "reference_answer": "Use =COUNTIF(A1:A20,\">100\").",
@@ -128,6 +142,7 @@
   {
 
     "level": 2,
+    "question_type": "seed",
     "topic": "Wildcards",
     "question": "Explain how wildcards (*, ?) work in Excel functions.",
     "reference_answer": "* matches any number of characters, ? matches a single character in lookups and filters.",
@@ -137,6 +152,7 @@
   {
 
     "level": 2,
+    "question_type": "seed",
     "topic": "Conditional Formatting",
     "question": "What is conditional formatting and when would you use it?",
     "reference_answer": "It formats cells based on criteria, e.g., highlighting duplicates or thresholds.",
@@ -146,6 +162,7 @@
   {
 
     "level": 2,
+    "question_type": "seed",
     "topic": "Data Validation",
     "question": "How do you create a drop-down list in Excel?",
     "reference_answer": "Use Data → Data Validation → List and provide allowed values.",
@@ -155,6 +172,7 @@
   {
 
     "level": 2,
+    "question_type": "seed",
     "topic": "Error Handling",
     "question": "What’s the purpose of IFERROR in Excel?",
     "reference_answer": "IFERROR returns a default value if a formula results in an error.",
@@ -164,6 +182,7 @@
   {
 
     "level": 2,
+    "question_type": "seed",
     "topic": "Multiple Conditions",
     "question": "How do you use COUNTIFS and SUMIFS?",
     "reference_answer": "COUNTIFS counts with multiple criteria; SUMIFS sums with multiple criteria.",
@@ -172,6 +191,7 @@
   },
   {
     "level": 2,
+    "question_type": "seed",
     "topic": "Index-Match",
     "question": "Why would you use INDEX-MATCH instead of VLOOKUP?",
     "reference_answer": "Because INDEX-MATCH allows lookups left of the key, is faster, and flexible to column changes.",
@@ -182,6 +202,7 @@
   {
 
     "level": 3,
+    "question_type": "seed",
     "topic": "Power Query",
     "question": "What is Power Query used for?",
     "reference_answer": "Power Query imports, cleans, and transforms data across sources with an ETL interface.",
@@ -191,6 +212,7 @@
   {
 
     "level": 3,
+    "question_type": "seed",
     "topic": "Power Pivot",
     "question": "Explain Power Pivot and the use of DAX measures.",
     "reference_answer": "Power Pivot adds a data model and DAX allows creation of calculated measures for analysis.",
@@ -200,6 +222,7 @@
   {
 
     "level": 3,
+    "question_type": "seed",
     "topic": "Solver",
     "question": "How do you use Solver to maximize profit under constraints?",
     "reference_answer": "Define objective cell for profit, variable cells for quantities, set constraints and solve.",
@@ -209,6 +232,7 @@
   {
 
     "level": 3,
+    "question_type": "seed",
     "topic": "What-If Analysis",
     "question": "What is Goal Seek and Scenario Manager?",
     "reference_answer": "Goal Seek finds input to reach output; Scenario Manager compares multiple input sets.",
@@ -218,6 +242,7 @@
   {
 
     "level": 3,
+    "question_type": "seed",
     "topic": "Array Formulas",
     "question": "What is an array formula and how is SUMPRODUCT used?",
     "reference_answer": "An array formula handles multiple inputs; SUMPRODUCT multiplies arrays and sums result.",
@@ -227,6 +252,7 @@
   {
 
     "level": 3,
+    "question_type": "seed",
     "topic": "Named Ranges",
     "question": "How do you create a dynamic named range using OFFSET?",
     "reference_answer": "OFFSET defines a range that expands based on count of rows/columns.",
@@ -236,6 +262,7 @@
   {
 
     "level": 3,
+    "question_type": "seed",
     "topic": "Formula Debugging",
     "question": "What is the Evaluate Formula tool used for?",
     "reference_answer": "It steps through calculations to debug complex formulas.",
@@ -245,6 +272,7 @@
   {
 
     "level": 3,
+    "question_type": "seed",
     "topic": "Structured References",
     "question": "What is structured referencing in Excel tables?",
     "reference_answer": "Structured referencing uses table names and column headers instead of cell ranges.",
@@ -254,6 +282,7 @@
   {
 
     "level": 3,
+    "question_type": "seed",
     "topic": "Transpose",
     "question": "How do you use the TRANSPOSE function?",
     "reference_answer": "TRANSPOSE flips rows into columns and vice versa.",
@@ -262,6 +291,7 @@
   },
   {
     "level": 3,
+    "question_type": "seed",
     "topic": "Macros",
     "question": "What is a macro in Excel and when would you use it?",
     "reference_answer": "A macro records or runs automated tasks via VBA.",
@@ -272,6 +302,7 @@
 {
 
     "level": 4,
+    "question_type": "seed",
     "topic": "Data Aggregation",
     "question": "Imagine you're managing weekly sales data from 10 regions. How would you consolidate this data to analyze monthly trends using Excel?",
     "reference_answer": "Use formulas like SUMIFS or PivotTables to group by date, create monthly buckets, and summarize sales per region.",
@@ -281,6 +312,7 @@
   {
 
     "level": 4,
+    "question_type": "seed",
     "topic": "Customer Insights",
     "question": "You're asked to analyze customer churn over the past 6 months. Describe how you’d calculate and interpret the churn rate using Excel.",
     "reference_answer": "Track the number of lost customers per month, divide by total customers at the start. Use line charts or conditional formatting for trends.",
@@ -290,6 +322,7 @@
   {
 
     "level": 4,
+    "question_type": "seed",
     "topic": "Project Tracking",
     "question": "Your manager wants to visualize a project timeline with tasks, start dates, and durations. How would you represent this clearly in Excel?",
     "reference_answer": "Use a table with start date + duration, add helper columns for progress, and apply conditional formatting or a bar chart to simulate a Gantt chart.",
@@ -299,6 +332,7 @@
   {
 
     "level": 4,
+    "question_type": "seed",
     "topic": "Investment Planning",
     "question": "You are evaluating an investment with variable cash flows. Explain how you'd model ROI or NPV in Excel.",
     "reference_answer": "List cash flows by period, apply the NPV function with discount rate, and compare it to the investment amount for ROI.",
@@ -308,6 +342,7 @@
   {
 
     "level": 4,
+    "question_type": "seed",
     "topic": "Data Cleaning",
     "question": "You receive a dataset with inconsistent date formats, duplicate entries, and blank rows. Walk through the steps you'd take to clean this in Excel.",
     "reference_answer": "Use 'Text to Columns' or Power Query for date parsing, remove duplicates, and filter/remove blanks. Normalize values if needed.",
@@ -317,6 +352,7 @@
   {
 
     "level": 4,
+    "question_type": "seed",
     "topic": "Reporting Automation",
     "question": "How would you set up a reusable Excel file that automatically updates a monthly sales report when new data is added?",
     "reference_answer": "Use dynamic named ranges or tables, connect to external data with Power Query, and refresh PivotTables/charts.",
@@ -326,6 +362,7 @@
   {
 
     "level": 4,
+    "question_type": "seed",
     "topic": "KPI Tracking",
     "question": "Explain how you would set up KPI tracking in Excel for a marketing campaign across multiple metrics like CTR, conversion rate, and ROI.",
     "reference_answer": "Calculate KPIs using formulas, organize in summary tables, use conditional formatting for targets, and optionally track trends with sparklines.",
@@ -335,6 +372,7 @@
   {
 
     "level": 4,
+    "question_type": "seed",
     "topic": "Forecasting",
     "question": "You’re tasked with forecasting future product sales. Describe how you’d use Excel’s built-in tools to approach this.",
     "reference_answer": "Use a line chart for trend visualization, then apply FORECAST.LINEAR or trendline options in chart, and optionally use moving averages.",
@@ -344,6 +382,7 @@
   {
 
     "level": 4,
+    "question_type": "seed",
     "topic": "Scenario Analysis",
     "question": "You want to compare the profitability of three pricing models. Explain how you’d structure this comparison in Excel.",
     "reference_answer": "List assumptions for each scenario, calculate profit per model, use Scenario Manager or a summary table to compare outputs.",
@@ -352,6 +391,7 @@
   },
   {
     "level": 4,
+    "question_type": "seed",
     "topic": "Data Strategy",
     "question": "How would you prepare Excel data to be consumed in Power BI or other BI tools?",
     "reference_answer": "Clean the data, remove redundancies, create normalized tables with clear column names, ensure data types are consistent, and avoid merged cells.",

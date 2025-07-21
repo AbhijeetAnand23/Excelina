@@ -6,4 +6,5 @@ load_dotenv()
 
 client = MongoClient(os.getenv("MONGO_URI"))
 db = client["excelina"]
-seed_collection = db["seed_questions"]
+seed_collection = db["questions"]
+candidates_collection = db["candidates"] 
