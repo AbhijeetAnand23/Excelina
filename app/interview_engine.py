@@ -8,13 +8,11 @@ PASSING_SCORE_THRESHOLD = 6.0  # Out of 10
 def assign_initial_questions(candidate_object_id):
     candidate = candidates_collection.find_one({"_id": ObjectId(candidate_object_id)})
     if not candidate:
-        print("❌ Candidate not found.")
-        return
+        raise ValueError("Candidate not found.")
 
     allowed_levels = candidate.get("allowed_levels", [])
     if not allowed_levels:
-        print("⚠️ No allowed levels for candidate.")
-        return
+        raise ValueError("No allowed levels for candidate.")
 
     level = allowed_levels[0]  # Always start with the first allowed level
     questions = generate_candidate_questions(level, n=10)
@@ -33,35 +31,30 @@ def assign_initial_questions(candidate_object_id):
             "$push": {"interview_progress": {"$each": questions}}
         }
     )
-    print(f"[✅] Level {level} questions assigned to candidate {_id_str(candidate_object_id)}")
 
 # Progress to the next level only if previous is passed
 def assign_next_level_if_passed(candidate_object_id):
     candidate = candidates_collection.find_one({"_id": ObjectId(candidate_object_id)})
     if not candidate:
-        print("❌ Candidate not found.")
-        return
+        raise ValueError("Candidate not found.")
 
     progress = candidate.get("interview_progress", [])
     allowed_levels = candidate.get("allowed_levels", [])
     eliminated = candidate.get("eliminated_at_level")
 
     if eliminated:
-        print(f"❌ Candidate eliminated at level {eliminated}")
-        return
+        raise ValueError("Candidate eliminated at level {eliminated}")
 
     # Find current level
     levels_attempted = sorted(set(q["level"] for q in progress))
     if not levels_attempted:
-        print("⚠️ No level attempted yet.")
-        return
+        raise ValueError("No level attempted yet.")
 
     current_level = levels_attempted[-1]
     current_level_questions = [q for q in progress if q["level"] == current_level]
 
     if len(current_level_questions) < 10 or any(q["score"] is None for q in current_level_questions):
-        print(f"⏳ Level {current_level} not fully answered or evaluated.")
-        return
+        raise ValueError(f"Level {current_level} not fully answered or evaluated.")
 
     # Calculate average score
     avg_score = sum(q["score"] for q in current_level_questions) / 10.0
@@ -72,8 +65,7 @@ def assign_next_level_if_passed(candidate_object_id):
             {"_id": ObjectId(candidate_object_id)},
             {"$set": {"eliminated_at_level": current_level, "status": "eliminated"}}
         )
-        print(f"[❌] Candidate eliminated at level {current_level}")
-        return
+        raise ValueError(f"Candidate eliminated at level {current_level}")
 
     # Assign next level
     current_index = allowed_levels.index(current_level)
