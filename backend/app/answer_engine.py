@@ -81,7 +81,16 @@ def evaluate_answer(candidate_id: str, question_id: str, user_answer: str):
     score = round(result * 10, 2)
 
     candidates_collection.update_one(
-        {"_id": ObjectId(candidate_id), "interview_progress._id": ObjectId(question_id)},
-        {"$set": {"interview_progress.$.score": score}}
+    {
+        "_id": ObjectId(candidate_id),
+        "interview_progress.question_id": ObjectId(question_id)
+    },
+    {
+        "$set": {
+            "interview_progress.$.score": score,
+            "interview_progress.$.user_answer": user_answer,
+            "interview_progress.$.evaluated": True
+        }
+    }
     )
     return score

@@ -2,7 +2,7 @@ from app.question_engine import generate_candidate_questions
 from data.db import candidates_collection
 from bson.objectid import ObjectId
 
-PASSING_SCORE_THRESHOLD = 6.0  # Out of 10
+PASSING_SCORE_THRESHOLD = 60  # Out of 100
 
 # Assign level 1 questions right after registration
 def assign_initial_questions(candidate_object_id):
@@ -57,10 +57,10 @@ def assign_next_level_if_passed(candidate_object_id):
         raise ValueError(f"Level {current_level} not fully answered or evaluated.")
 
     # Calculate average score
-    avg_score = sum(q["score"] for q in current_level_questions) / 10.0
-    print(f"[ℹ️] Candidate's average score at Level {current_level}: {avg_score:.2f}")
+    total_score = sum(q["score"] for q in current_level_questions)
+    print(f"[ℹ️] Candidate's total score at Level {current_level}: {total_score:.2f}/100")
 
-    if avg_score < PASSING_SCORE_THRESHOLD:
+    if total_score < PASSING_SCORE_THRESHOLD:
         candidates_collection.update_one(
             {"_id": ObjectId(candidate_object_id)},
             {"$set": {"eliminated_at_level": current_level, "status": "eliminated"}}
