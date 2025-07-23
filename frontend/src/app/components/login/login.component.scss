@@ -1,0 +1,11 @@
+.container {
+  @extend .container;
+
+  input {
+    margin-bottom: 12px;
+  }
+
+  .error {
+    margin-top: -10px;
+  }
+}

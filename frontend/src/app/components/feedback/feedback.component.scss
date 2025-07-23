@@ -1,0 +1,25 @@
+.feedback-container {
+//   @extend .container;
+  text-align: center;
+
+  .status {
+    font-size: 18px;
+    margin: 16px 0;
+  }
+
+  .passed {
+    color: #15803d;
+  }
+
+  .failed {
+    color: #dc2626;
+  }
+
+  .complete {
+    color: #1e3a8a;
+  }
+
+  button {
+    margin-top: 20px;
+  }
+}

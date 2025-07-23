@@ -1,0 +1,62 @@
+.interview-container {
+//   @extend .container;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .question-header {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e3a8a;
+  }
+
+  .question-text {
+    font-size: 16px;
+    color: #334155;
+    background-color: #f1f5f9;
+    padding: 16px;
+    border-radius: 8px;
+    border-left: 4px solid #2563eb;
+  }
+
+  textarea {
+    min-height: 150px;
+    resize: vertical;
+    font-size: 15px;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+
+  textarea:focus {
+    border-color: #2563eb;
+    outline: none;
+  }
+
+  .btn-submit {
+    width: fit-content;
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-submit:hover {
+    background-color: #1e40af;
+  }
+
+  .error {
+    color: #dc2626;
+    font-size: 14px;
+  }
+
+  .success {
+    color: #15803d;
+    font-size: 14px;
+  }
+}

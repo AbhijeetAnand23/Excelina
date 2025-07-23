@@ -1,0 +1,16 @@
+<div class="interview-container" *ngIf="currentQuestion">
+  <div class="question-header">
+    Question {{ currentIndex + 1 }} of {{ totalQuestions }}
+  </div>
+
+  <div class="question-text">
+    {{ currentQuestion.generated_question }}
+  </div>
+
+  <textarea [(ngModel)]="userAnswer" placeholder="Type your answer here..."></textarea>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+
+  <button class="btn-submit" (click)="submitAnswer()">Submit Answer</button>
+</div>
