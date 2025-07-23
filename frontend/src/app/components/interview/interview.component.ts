@@ -40,12 +40,19 @@ export class InterviewComponent implements OnInit {
     this.api.getQuestions(this.candidateId).subscribe({
       next: (res: any) => {
         this.questions = res;
+
+        const firstUnansweredIndex = this.questions.findIndex(q => q.score === null);
+        this.currentIndex = firstUnansweredIndex !== -1 ? firstUnansweredIndex : 0;
+
+        // Preload answer if it's a previously answered one
+        this.userAnswer = this.questions[this.currentIndex]?.user_answer || '';
       },
       error: () => {
         this.errorMessage = 'Failed to load questions. Please try again.';
       }
     });
   }
+
 
   submitAnswer(): void {
     this.errorMessage = '';
@@ -69,8 +76,19 @@ export class InterviewComponent implements OnInit {
         this.currentIndex++;
 
         if (this.currentIndex === this.questions.length) {
-          this.api.nextLevel(this.candidateId!).subscribe(() => {
-            this.router.navigate(['/feedback']);
+          // 🟡 Evaluate the round
+          this.api.completeRound().subscribe({
+            next: (res: any) => {
+              // if (res.status === 'eliminated' || res.status === 'completed') {
+              //   this.router.navigate(['/feedback']);
+              // } else {
+              //   this.router.navigate(['/home']);
+              // }
+              this.router.navigate(['/feedback']);
+            },
+            error: () => {
+              this.errorMessage = 'Error evaluating round. Please try again.';
+            }
           });
         }
       },

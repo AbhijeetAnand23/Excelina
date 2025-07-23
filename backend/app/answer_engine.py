@@ -63,34 +63,36 @@ g_eval = GEval(
 )
 
 def evaluate_answer(candidate_id: str, question_id: str, user_answer: str):
-    cand = candidates_collection.find_one({"_id": ObjectId(candidate_id)})
-    if not cand:
+    candidate = candidates_collection.find_one({"_id": ObjectId(candidate_id)})
+    if not candidate:
         raise ValueError("Candidate not found.")
 
-    question_doc = next((q for q in cand["interview_progress"] if str(q["question_id"]) == question_id), None)
-    if not question_doc:
+    found = False
+    for i, round_data in enumerate(candidate.get("interview_progress", [])):
+        for j, question in enumerate(round_data.get("questions", [])):
+            if str(question.get("question_id")) == question_id:
+                test_case = LLMTestCase(
+                    input=question["generated_question"],
+                    actual_output=user_answer,
+                    expected_output=question["generated_reference_answer"]
+                )
+
+                result = g_eval.measure(test_case)
+                score = round(result * 10, 2)
+
+                # Update the nested question in-place
+                update_query = {
+                    "_id": ObjectId(candidate_id)
+                }
+                update_fields = {
+                    f"interview_progress.{i}.questions.{j}.user_answer": user_answer,
+                    f"interview_progress.{i}.questions.{j}.evaluated": True,
+                    f"interview_progress.{i}.questions.{j}.score": score
+                }
+
+                candidates_collection.update_one(update_query, {"$set": update_fields})
+                found = True
+                return score
+
+    if not found:
         raise ValueError("Question ID not found in candidate's interview progress.")
-
-    test_case = LLMTestCase(
-        input=question_doc["generated_question"],
-        actual_output=user_answer,
-        expected_output=question_doc["generated_reference_answer"]
-    )
-
-    result = g_eval.measure(test_case)
-    score = round(result * 10, 2)
-
-    candidates_collection.update_one(
-    {
-        "_id": ObjectId(candidate_id),
-        "interview_progress.question_id": ObjectId(question_id)
-    },
-    {
-        "$set": {
-            "interview_progress.$.score": score,
-            "interview_progress.$.user_answer": user_answer,
-            "interview_progress.$.evaluated": True
-        }
-    }
-    )
-    return score

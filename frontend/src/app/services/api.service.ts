@@ -19,33 +19,52 @@ export class ApiService {
     });
   }
 
+  // ✅ Registration
   registerCandidate(data: any) {
     return this.http.post(`${this.baseUrl}/register-candidate`, data);
   }
 
-  getQuestions(candidateId: string) {
-    return this.http.get(`${this.baseUrl}/get-questions/${candidateId}`);
+  // ✅ Login
+  loginCandidate(email: string, password: string) {
+    return this.http.post(`${this.baseUrl}/login-candidate`, { email, password });
   }
 
+  // ✅ Get Questions
+  getQuestions(candidateId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/get-questions/${candidateId}`);
+  }
+
+  // ✅ Submit Answer
   submitAnswer(payload: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/submit-answer`, payload, {
       headers: this.getAuthHeaders()
     });
   }
 
-  nextLevel(candidateId: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/next-level`, { candidate_id: candidateId }, {
+  // ✅ Start a new round (Level)
+  startRound(data: { round: number; level: number }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/start-round`, data, {
       headers: this.getAuthHeaders()
     });
   }
 
-  getCandidateStatus(candidateId: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/candidate-status/${candidateId}`, {
+  // ✅ Complete and evaluate current round
+  completeRound(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/complete-round`, {}, {
       headers: this.getAuthHeaders()
     });
   }
-  
-  loginCandidate(email: string, password: string) {
-    return this.http.post(`${this.baseUrl}/login-candidate`, { email, password });
+
+  // ✅ Get Candidate Status
+  getCandidateStatus(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/candidate-status`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getLastRoundStatus(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/last-round-status`, {
+      headers: this.getAuthHeaders()
+    });
   }
 }

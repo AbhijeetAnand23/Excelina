@@ -25,12 +25,13 @@ export class LoginComponent {
       next: (res: any) => {
         localStorage.setItem('candidate_id', res.candidate_id);
         localStorage.setItem('token', res.token);
+        this.router.navigate(['/home']); 
 
-        if (res.status === 'in_progress') {
-          this.router.navigate(['/interview']);
-        } else {
-          this.router.navigate(['/feedback']);
-        }
+        // if (res.status === 'in_progress') {
+        //   this.router.navigate(['/interview']);
+        // } else {
+        //   this.router.navigate(['/feedback']);
+        // }
       },
       error: err => {
         this.error = err.error?.error || 'Login failed';

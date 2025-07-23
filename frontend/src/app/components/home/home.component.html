@@ -1,0 +1,28 @@
+<div class="home-container">
+  <h2>Welcome to the Excel Interviewer</h2>
+
+  <p *ngIf="status === 'completed'" class="status success">
+    🎉 Congratulations! You have completed all levels.
+  </p>
+
+  <p *ngIf="status === 'eliminated'" class="status fail">
+    ❌ You were eliminated at level {{ eliminatedLevel }}.
+  </p>
+
+  <p *ngIf="status === 'in_progress'">
+    ✅ Current Level: {{ currentLevel }} |
+    <span *ngIf="totalScore !== null">Last Round Score: {{ totalScore }} / 100</span>
+  </p>
+
+  <div *ngIf="status === 'registered' || status === 'in_progress'" class="actions">
+    <button (click)="startInterview()" [disabled]="loading">
+      {{ incompleteRound ? 'Resume Interview' : (currentLevel === null ? 'Start Interview' : 'Start Next Level') }}
+    </button>
+  </div>
+
+  <div *ngIf="status === 'eliminated' || status === 'completed'" class="actions">
+    <button routerLink="/feedback">View Feedback</button>
+  </div>
+
+  <div *ngIf="message" class="error">{{ message }}</div>
+</div>

@@ -5,9 +5,35 @@
     <strong>Total Score:</strong> {{ totalScore }} / 100
   </p>
 
+  <!-- Detailed Progress Table -->
+  <div *ngIf="progress.length > 0" class="progress-table">
+    <h3>Answered Questions Summary</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Level</th>
+          <th>Question</th>
+          <th>Your Answer</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let q of progress; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ q.level }}</td>
+          <td>{{ q.generated_question }}</td>
+          <td>{{ q.user_answer }}</td>
+          <td>{{ q.score }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Conditional Messages -->
   <div *ngIf="status === 'in_progress'">
     <p class="status passed">✅ You passed this level and can move to the next!</p>
-    <button (click)="goToNextLevel()">Start Next Level</button>
+    <button (click)="goToNextLevel()">Back to Home to Start Next Level</button>
   </div>
 
   <div *ngIf="status === 'eliminated'">

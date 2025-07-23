@@ -16,28 +16,33 @@ export class FeedbackComponent implements OnInit {
   totalScore: number | null = null;
   currentLevel: number | null = null;
   eliminatedLevel: number | null = null;
+  progress: any[] = [];
 
   constructor(private api: ApiService, private router: Router) {}
 
   ngOnInit(): void {
     if (!this.candidateId) {
-      this.router.navigate(['/register']);
+      this.router.navigate(['/login']);
       return;
     }
 
-    this.api.getCandidateStatus(this.candidateId).subscribe((res: any) => {
+    this.api.getCandidateStatus().subscribe((res: any) => {
       this.status = res.status;
       this.totalScore = res.total_score;
       this.currentLevel = res.current_level;
       this.eliminatedLevel = res.eliminated_at_level;
     });
+
+    this.api.getQuestions(this.candidateId).subscribe((res: any[]) => {
+      this.progress = res.filter(q => q.score !== null);
+    });
   }
 
   goToNextLevel() {
-    this.router.navigate(['/interview']);
+    this.router.navigate(['/home']);
   }
 
   goHome() {
-    this.router.navigate(['/register']);
+    this.router.navigate(['/home']);
   }
 }

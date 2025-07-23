@@ -4,17 +4,15 @@ from bson.objectid import ObjectId
 
 PASSING_SCORE_THRESHOLD = 60  # Out of 100
 
-# Assign level 1 questions right after registration
-def assign_initial_questions(candidate_object_id):
-    candidate = candidates_collection.find_one({"_id": ObjectId(candidate_object_id)})
+def assign_round_questions(candidate_id, round_num, level):
+    candidate = candidates_collection.find_one({"_id": ObjectId(candidate_id)})
     if not candidate:
         raise ValueError("Candidate not found.")
 
     allowed_levels = candidate.get("allowed_levels", [])
-    if not allowed_levels:
-        raise ValueError("No allowed levels for candidate.")
+    if level not in allowed_levels:
+        raise ValueError(f"Level {level} is not allowed for this candidate.")
 
-    level = allowed_levels[0]  # Always start with the first allowed level
     questions = generate_candidate_questions(level, n=10)
 
     for q in questions:
@@ -24,74 +22,96 @@ def assign_initial_questions(candidate_object_id):
             "evaluated": False
         })
 
+    round_data = {
+        "round": round_num,
+        "level": level,
+        "completed": False,
+        "passed": False,
+        "total_score": None,
+        "questions": questions
+    }
+
     candidates_collection.update_one(
-        {"_id": ObjectId(candidate_object_id)},
+        {"_id": ObjectId(candidate_id)},
         {
             "$set": {"status": "in_progress"},
-            "$push": {"interview_progress": {"$each": questions}}
+            "$push": {"interview_progress": round_data}
         }
     )
 
-# Progress to the next level only if previous is passed
-def assign_next_level_if_passed(candidate_object_id):
-    candidate = candidates_collection.find_one({"_id": ObjectId(candidate_object_id)})
+    print(f"[✅] Assigned Level {level} as Round {round_num} to candidate {str(candidate_id)}")
+
+def check_and_update_round_status(candidate_id):
+    candidate = candidates_collection.find_one({"_id": ObjectId(candidate_id)})
     if not candidate:
         raise ValueError("Candidate not found.")
 
     progress = candidate.get("interview_progress", [])
     allowed_levels = candidate.get("allowed_levels", [])
-    eliminated = candidate.get("eliminated_at_level")
+    eliminated_level = candidate.get("eliminated_at_level")
 
-    if eliminated:
-        raise ValueError("Candidate eliminated at level {eliminated}")
+    if eliminated_level:
+        return {
+            "status": "eliminated",
+            "level": eliminated_level
+        }
 
-    # Find current level
-    levels_attempted = sorted(set(q["level"] for q in progress))
-    if not levels_attempted:
-        raise ValueError("No level attempted yet.")
+    if not progress:
+        raise ValueError("No rounds attempted yet.")
 
-    current_level = levels_attempted[-1]
-    current_level_questions = [q for q in progress if q["level"] == current_level]
+    latest_round = progress[-1]
+    questions = latest_round.get("questions", [])
+    level = latest_round.get("level")
 
-    if len(current_level_questions) < 10 or any(q["score"] is None for q in current_level_questions):
-        raise ValueError(f"Level {current_level} not fully answered or evaluated.")
+    if len(questions) < 10 or any(q["score"] is None for q in questions):
+        raise ValueError(f"Round {latest_round['round']} not fully completed.")
 
-    # Calculate average score
-    total_score = sum(q["score"] for q in current_level_questions)
-    print(f"[ℹ️] Candidate's total score at Level {current_level}: {total_score:.2f}/100")
+    total_score = sum(q["score"] for q in questions)
+    passed = total_score >= PASSING_SCORE_THRESHOLD
+    completed = True
 
-    if total_score < PASSING_SCORE_THRESHOLD:
+    # Update the latest round in DB
+    candidates_collection.update_one(
+        {
+            "_id": ObjectId(candidate_id),
+            "interview_progress.round": latest_round["round"]
+        },
+        {
+            "$set": {
+                "interview_progress.$.total_score": total_score,
+                "interview_progress.$.completed": completed,
+                "interview_progress.$.passed": passed
+            }
+        }
+    )
+
+    if not passed:
         candidates_collection.update_one(
-            {"_id": ObjectId(candidate_object_id)},
-            {"$set": {"eliminated_at_level": current_level, "status": "eliminated"}}
+            {"_id": ObjectId(candidate_id)},
+            {"$set": {
+                "eliminated_at_level": level,
+                "status": "eliminated"
+            }}
         )
-        raise ValueError(f"Candidate eliminated at level {current_level}")
+        return {
+            "status": "eliminated",
+            "level": level
+        }
 
-    # Assign next level
-    current_index = allowed_levels.index(current_level)
+    # Check if this was the last level
+    current_index = allowed_levels.index(level)
     if current_index + 1 >= len(allowed_levels):
         candidates_collection.update_one(
-            {"_id": ObjectId(candidate_object_id)},
+            {"_id": ObjectId(candidate_id)},
             {"$set": {"status": "completed"}}
         )
         print("[🏁] Candidate completed all levels!")
-        return
+        return {
+            "status": "completed"
+        }
 
-    next_level = allowed_levels[current_index + 1]
-    new_questions = generate_candidate_questions(next_level, n=10)
-    for q in new_questions:
-        q.update({
-            "score": None,
-            "user_answer": None,
-            "evaluated": False
-        })
-
-    candidates_collection.update_one(
-        {"_id": ObjectId(candidate_object_id)},
-        {"$push": {"interview_progress": {"$each": new_questions}}}
-    )
-    print(f"[✅] Assigned Level {next_level} questions to candidate {_id_str(candidate_object_id)}")
-
-
-def _id_str(oid):
-    return str(oid) if isinstance(oid, ObjectId) else oid
+    print(f"[ℹ️] Round {latest_round['round']} evaluated: {'✅ Passed' if passed else '❌ Failed'} ({total_score}/100)")
+    return {
+        "status": "progressed",
+        "next_level": allowed_levels[current_index + 1]
+    }
