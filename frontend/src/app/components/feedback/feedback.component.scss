@@ -72,6 +72,9 @@ table {
 .button-container {
   display: flex;
   justify-content: center; 
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
 }
 
 .btn {
@@ -97,4 +100,26 @@ table {
   border-radius: 0.5rem;
   font-size: 1.1rem;
   margin-bottom: 1rem;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem; /* space between buttons */
+  margin-top: 1.5rem;
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #1976d2;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #1565c0;
+    }
+  }
 }

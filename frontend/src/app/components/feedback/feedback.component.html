@@ -16,7 +16,6 @@
             <th>Level</th>
             <th>Question</th>
             <th>Score</th>
-            <th>Feedback</th>
           </tr>
         </thead>
         <tbody>
@@ -25,7 +24,6 @@
             <td>{{ q.level }}</td>
             <td>{{ q.generated_question }}</td>
             <td>{{ q.score }}</td>
-            <td>{{ q.feedback }}</td>
           </tr>
         </tbody>
       </table>
@@ -44,7 +42,9 @@
       <p>🎉 You have successfully completed all levels!</p>
     </div>
     <div class="button-container">
+      <button class="btn" (click)="downloadReport()">Download PDF Report</button>
       <button class="btn" (click)="goHome()">Back to Home</button>
     </div>
+
   </div>
 </div>

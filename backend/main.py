@@ -1,7 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from dotenv import load_dotenv
-from pymongo import MongoClient, errors
 import os
 import jwt
 import bcrypt 
@@ -11,6 +10,10 @@ from data.db import candidates_collection
 from app.candidate_engine import register_candidate as register_new_candidate
 from bson.objectid import ObjectId
 from app.utils import token_required
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet
+from io import BytesIO
 
 load_dotenv()
 
@@ -253,6 +256,48 @@ def last_round_status(candidate_id):
         "round": last_round.get("round")
     })
 
+@app.route("/download-report", methods=["GET"])
+@token_required
+def download_report(candidate_id):
+    candidate = candidates_collection.find_one({"_id": ObjectId(candidate_id)})
+    if not candidate:
+        return jsonify({"error": "Candidate not found"}), 404
+
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    styles = getSampleStyleSheet()
+    story = []
+
+    # ✅ Candidate Details
+    story.append(Paragraph(f"<b>Candidate ID:</b> {str(candidate['_id'])}", styles['Normal']))
+    story.append(Paragraph(f"<b>Name:</b> {candidate.get('name', 'N/A')}", styles['Normal']))
+    story.append(Paragraph(f"<b>Email:</b> {candidate.get('email', 'N/A')}", styles['Normal']))
+    story.append(Spacer(1, 12))
+
+    for round_data in candidate.get("interview_progress", []):
+        level = round_data.get("level")
+        round_num = round_data.get("round")
+        story.append(Paragraph(f"<b>Level {level} - Round {round_num}</b>", styles['Heading3']))
+        story.append(Spacer(1, 6))
+
+        for q in round_data.get("questions", []):
+            if q.get("score") is None:
+                continue
+
+            story.append(Paragraph(f"<b>Question:</b> {q.get('generated_question', '')}", styles['Normal']))
+            story.append(Paragraph(f"<b>Your Answer:</b> {q.get('user_answer', '')}", styles['Normal']))
+            story.append(Paragraph(f"<b>Score:</b> {q.get('score', 'N/A')}", styles['Normal']))
+            story.append(Paragraph(f"<b>Feedback:</b> {q.get('feedback', '')}", styles['Normal']))
+            story.append(Spacer(1, 12))
+
+    # Final result
+    story.append(Spacer(1, 24))
+    story.append(Paragraph("<b>Final Status:</b> " + candidate.get("status", "unknown").capitalize(), styles['Title']))
+
+    doc.build(story)
+    buffer.seek(0)
+
+    return send_file(buffer, as_attachment=True, download_name="interview_report.pdf", mimetype="application/pdf")
 
 if __name__ == "__main__":
     app.run(debug=True, port=7860)

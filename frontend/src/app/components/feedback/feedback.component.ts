@@ -49,4 +49,21 @@ export class FeedbackComponent implements OnInit {
   goHome() {
     this.router.navigate(['/home']);
   }
+
+  downloadReport() {
+    this.api.downloadReport().subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'interview_report.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        alert('Failed to download report. Please try again.');
+      }
+    });
+  }
+
 }

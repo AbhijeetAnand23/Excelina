@@ -67,4 +67,13 @@ export class ApiService {
       headers: this.getAuthHeaders()
     });
   }
+
+  downloadReport(): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/download-report`, {
+      responseType: 'blob',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  } 
 }
