@@ -120,9 +120,10 @@ def submit_answer(candidate_id):
             for question in round_data.get("questions", []):
                 if str(question.get("question_id")) == question_id:
                     question["user_answer"] = user_answer
-                    score = evaluate_answer(candidate_id, question_id, user_answer)
+                    result = evaluate_answer(candidate_id, question_id, user_answer)
                     question["evaluated"] = True
-                    question["score"] = score
+                    question["score"] = result["score"]
+                    question["feedback"] = result["feedback"]
                     found = True
                     break
             if found:
@@ -137,7 +138,11 @@ def submit_answer(candidate_id):
             {"$set": {"interview_progress": candidate["interview_progress"]}}
         )
 
-        return jsonify({"message": "Answer evaluated", "score": score})
+        return jsonify({
+            "message": "Answer evaluated",
+            "score": result["score"],
+            "feedback": result["feedback"],
+        })
 
     except ValueError as ve:
         return jsonify({"error": str(ve)}), 404 if "not found" in str(ve).lower() else 400

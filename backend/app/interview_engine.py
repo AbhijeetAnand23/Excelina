@@ -19,7 +19,8 @@ def assign_round_questions(candidate_id, round_num, level):
         q.update({
             "score": None,
             "user_answer": None,
-            "evaluated": False
+            "evaluated": False,
+            "feedback": None,
         })
 
     round_data = {

@@ -80,22 +80,33 @@ def evaluate_answer(candidate_id: str, question_id: str, user_answer: str):
                 result = g_eval.measure(test_case)
                 score = round(result * 10, 2)
 
-                # Update the nested question in-place
+                feedback_tags = get_feedback_tags(
+                    question["generated_question"],
+                    user_answer,
+                    question["generated_reference_answer"]
+                )
+
                 update_query = {
                     "_id": ObjectId(candidate_id)
                 }
                 update_fields = {
                     f"interview_progress.{i}.questions.{j}.user_answer": user_answer,
                     f"interview_progress.{i}.questions.{j}.evaluated": True,
-                    f"interview_progress.{i}.questions.{j}.score": score
+                    f"interview_progress.{i}.questions.{j}.score": score,
+                    f"interview_progress.{i}.questions.{j}.feedback": feedback_tags.get("feedback"),
                 }
 
                 candidates_collection.update_one(update_query, {"$set": update_fields})
                 found = True
-                return score
+                return {
+                    "score": score,
+                    "feedback": feedback_tags.get("feedback")
+                }
+
 
     if not found:
         raise ValueError("Question ID not found in candidate's interview progress.")
+
 
 def contains_cuss_words(text: str) -> bool:
     prompt = f"""Check if the following text contains any cuss words, profanity, or inappropriate language. Just respond with "Yes" or "No".
@@ -104,3 +115,32 @@ Text: "{text}"
 """
     response = hf_llm.generate(prompt).strip().lower()
     return "yes" in response
+
+def get_feedback_tags(question: str, user_answer: str, reference_answer: str) -> dict:
+    prompt = f"""
+You're an Excel interviewer evaluating a candidate's answer.
+
+Provide:
+1. A short feedback sentence about the user's answer.
+
+Return your response in this JSON format:
+{{
+  "feedback": "<your feedback>"
+}}
+
+Question: {question}
+
+User's Answer: {user_answer}
+
+Reference Answer: {reference_answer}
+"""
+
+    try:
+        result = hf_llm.generate(prompt)
+        import json
+        return json.loads(result.strip())
+    except Exception as e:
+        print("[❌ Feedback parsing error]", e)
+        return {
+            "feedback": "Feedback not available."
+        }
