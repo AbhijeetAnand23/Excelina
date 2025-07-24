@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-interview',
@@ -17,10 +18,9 @@ export class InterviewComponent implements OnInit {
   currentIndex = 0;
   userAnswer = '';
 
-  errorMessage = '';
-  successMessage = '';
+  loading: boolean = false;
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router, private toast: ToastService) {}
 
   get totalQuestions(): number {
     return this.questions.length;
@@ -48,20 +48,19 @@ export class InterviewComponent implements OnInit {
         this.userAnswer = this.questions[this.currentIndex]?.user_answer || '';
       },
       error: () => {
-        this.errorMessage = 'Failed to load questions. Please try again.';
+        this.toast.show('error', 'Failed to load questions. Please try again.');
       }
     });
   }
 
 
   submitAnswer(): void {
-    this.errorMessage = '';
-    this.successMessage = '';
-
     if (!this.userAnswer.trim()) {
-      this.errorMessage = 'Please enter your answer before submitting.';
+      this.toast.show('error', 'Please enter your answer before submitting.');
       return;
     }
+
+    this.loading = true;
 
     const question = this.questions[this.currentIndex];
 
@@ -71,29 +70,30 @@ export class InterviewComponent implements OnInit {
       user_answer: this.userAnswer
     }).subscribe({
       next: () => {
-        this.successMessage = 'Answer submitted successfully!';
+        this.toast.show('success', 'Answer submitted!');
+
         this.userAnswer = '';
         this.currentIndex++;
+        this.loading = false;
 
         if (this.currentIndex === this.questions.length) {
-          // 🟡 Evaluate the round
+          // Final question: Complete the round
+          this.loading = true;
           this.api.completeRound().subscribe({
             next: (res: any) => {
-              // if (res.status === 'eliminated' || res.status === 'completed') {
-              //   this.router.navigate(['/feedback']);
-              // } else {
-              //   this.router.navigate(['/home']);
-              // }
+              this.loading = false;
               this.router.navigate(['/feedback']);
             },
             error: () => {
-              this.errorMessage = 'Error evaluating round. Please try again.';
+              this.loading = false;
+              this.toast.show('error', 'Something went wrong. Please try again after a few seconds.');
             }
           });
         }
       },
       error: () => {
-        this.errorMessage = 'Something went wrong while submitting your answer.';
+        this.loading = false;
+        this.toast.show('error', 'Something went wrong. Please try again after a few seconds.');
       }
     });
   }

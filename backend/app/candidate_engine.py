@@ -12,13 +12,13 @@ except errors.DuplicateKeyError:
     pass
 
 def register_candidate(name, email, role, password):
-    if role not in ["beginner", "experienced"]:
-        raise ValueError("Role must be either 'beginner' or 'experienced'.")
+    if role not in ["fresher", "experienced"]:
+        raise ValueError("Role must be either 'fresher' or 'experienced'.")
 
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     # Assign levels based on role
     level_range = {
-        "beginner": [1, 2, 3],
+        "fresher": [1, 2, 3],
         "experienced": [2, 3, 4]
     }
 

@@ -1,25 +1,100 @@
 .feedback-container {
-//   @extend .container;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  background-color: var(--honeydew);
+  min-height: 100vh;
+}
 
-  .status {
-    font-size: 18px;
-    margin: 16px 0;
+.card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 960px;
+  width: 100%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+  font-size: 1.75rem;
+  color: var(--berkeley-blue);
+  margin-bottom: 0.5rem;
+}
+
+.score {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  margin: 1rem 0;
+  color: var(--cerulean);
+}
+
+.progress-table {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    text-align: left;
+    vertical-align: top;
   }
 
-  .passed {
-    color: #15803d;
+  th {
+    background-color: var(--non-photo-blue);
+    color: var(--berkeley-blue);
   }
 
-  .failed {
-    color: #dc2626;
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
   }
+}
 
-  .complete {
-    color: #1e3a8a;
-  }
+.message.failed {
+  background-color: #ffe6e6;
+  color: #c62828;
+  border: 1px solid #f3b0b0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
 
-  button {
-    margin-top: 20px;
+.button-container {
+  display: flex;
+  justify-content: center; 
+}
+
+.btn {
+  padding: 0.6rem 1.2rem;
+  background-color: rgb(29, 53, 87);
+  color: white;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: medium;
+
+  &:hover {
+    background-color: rgb(22, 41, 67);
   }
+}
+
+.message.passed {
+  background-color: #e6ffed;
+  color: #1b5e20;
+  border: 1px solid #b5e2c1;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
 }

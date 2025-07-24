@@ -1,52 +1,76 @@
-/* styles.scss */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
-/* ========== Theme Variables ========== */
 :root {
-  --primary-color: #4f46e5;      // Indigo-600
-  --accent-color: #a78bfa;       // Purple-400
-  --background-color: #f9fafb;   // Gray-50
-  --card-bg-color: #ffffff;
-  --text-color: #111827;         // Gray-900
-  --error-color: #dc2626;
-  --success-color: #15803d;
+  --red-pantone: #e63946ff;
+  --honeydew: #f1faeeff;
+  --non-photo-blue: #a8dadcff;
+  --cerulean: #457b9dff;
+  --berkeley-blue: #1d3557ff;
+
+  --color-bg: var(--honeydew);
+  --color-text: var(--berkeley-blue);
+  --color-primary: var(--non-photo-blue);
+  --color-accent: var(--red-pantone);
+  --color-accent-hover: #c22d3d;
+  --color-input-border: #cbd5e1;
 }
 
-/* ========== Global Styles ========== */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
 }
 
 a {
   text-decoration: none;
-  color: var(--primary-color);
-
-  &:hover {
-    color: var(--accent-color);
-  }
+  color: inherit;
 }
 
 button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s ease;
-
-  &:hover {
-    background-color: var(--accent-color);
-  }
+  border: none;
+  transition: all 0.3s ease;
+  font-family: inherit;
 }
 
-.error {
-  color: var(--error-color);
+input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-input-border);
+  border-radius: 0.375rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  transition: border 0.3s ease;
 }
 
-.success {
-  color: var(--success-color);
+input:focus, textarea:focus, select:focus {
+  border-color: var(--cerulean);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.2);
 }
+
+.swal2-toast {
+  font-size: 1rem !important;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  color: #1f2937 !important;
+
+  max-width: 500px !important;        
+  width: fit-content !important;      
+  overflow: visible !important;       
+  white-space: normal !important;     
+  word-break: break-word !important;  
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.75rem 1.25rem !important;
+}
+

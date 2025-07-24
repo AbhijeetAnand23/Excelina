@@ -17,6 +17,8 @@ export class FeedbackComponent implements OnInit {
   currentLevel: number | null = null;
   eliminatedLevel: number | null = null;
   progress: any[] = [];
+  totalScoreAllLevels: number = 0;
+  maxScoreAllLevels: number = 0;
 
   constructor(private api: ApiService, private router: Router) {}
 
@@ -31,10 +33,12 @@ export class FeedbackComponent implements OnInit {
       this.totalScore = res.total_score;
       this.currentLevel = res.current_level;
       this.eliminatedLevel = res.eliminated_at_level;
+      this.maxScoreAllLevels = res.current_level * 100;
     });
 
     this.api.getQuestions(this.candidateId).subscribe((res: any[]) => {
       this.progress = res.filter(q => q.score !== null);
+      this.totalScoreAllLevels = this.progress.reduce((sum, q) => sum + (q.score || 0), 0);
     });
   }
 

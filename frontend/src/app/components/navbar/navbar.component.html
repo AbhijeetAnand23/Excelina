@@ -1,12 +1,18 @@
 <nav class="navbar">
   <div class="navbar-brand" routerLink="/">
-    ExcelMockAI
+    <img src="assets/excelina-icon1-nav.png" alt="Excelina Logo" class="logo" />
+    <span>Excelina</span>
   </div>
 
   <div class="nav-links">
     <a routerLink="/register" *ngIf="!isLoggedIn()">Register</a>
     <a routerLink="/login" *ngIf="!isLoggedIn()">Login</a>
-    <a routerLink="/feedback" *ngIf="isLoggedIn()">Feedback</a>
-    <button class="logout-btn" (click)="logout()" *ngIf="isLoggedIn()">Logout</button>
+    <span class="welcome-msg" *ngIf="isLoggedIn() && userName">
+      Welcome, {{ userName }}
+    </span>
+
+    <button class="logout-btn" (click)="logout()" *ngIf="isLoggedIn()">
+      Logout
+    </button>
   </div>
 </nav>

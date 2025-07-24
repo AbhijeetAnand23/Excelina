@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -15,28 +16,24 @@ export class RegisterComponent {
   candidate = {
     name: '',
     email: '',
-    role: 'beginner',
+    role: 'fresher',
     password: ''
   };
 
-  error = '';
-  success = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router, private toast: ToastService) {}
 
   onSubmit() {
-    this.error = '';
-    this.success = '';
 
     this.api.registerCandidate(this.candidate).subscribe({
       next: (res: any) => {
-        this.success = 'Registration successful! Please log in.';
+        this.toast.show('success', res.message);
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 1000);
       },
       error: (err) => {
-        this.error = err.error.error || 'Registration failed.';
+        this.toast.show('error', err.error?.error);
       }
     });
   }

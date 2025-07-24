@@ -185,6 +185,8 @@ def login_candidate():
         "message": "Login successful",
         "candidate_id": str(candidate["_id"]),
         "status": candidate["status"],
+        "name": candidate["name"],
+        "email": candidate["email"],
         "token": token
     })
 

@@ -1,17 +1,14 @@
-<h2>Register for Interview</h2>
+<form (ngSubmit)="onSubmit()" class="register-form">
+  <h2>Register for Interview</h2>
 
-<form (ngSubmit)="onSubmit()">
   <input [(ngModel)]="candidate.name" name="name" required placeholder="Your Name" type="text" />
   <input [(ngModel)]="candidate.email" name="email" required placeholder="Your Email" type="email" />
   <input [(ngModel)]="candidate.password" name="password" required placeholder="Create Password" type="password" />
 
   <select [(ngModel)]="candidate.role" name="role" required>
-    <option value="beginner">Beginner</option>
+    <option value="fresher">Fresher</option>
     <option value="experienced">Experienced</option>
   </select>
 
   <button type="submit">Register</button>
 </form>
-
-<p *ngIf="error" style="color:red; margin-top: 10px;">{{ error }}</p>
-<p *ngIf="success" style="color:green; margin-top: 10px;">{{ success }}</p>

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
+import { ToastService } from '../../services/toast.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +18,7 @@ export class LoginComponent {
   password: string = '';
   error: string = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router, private toast: ToastService, private auth: AuthService) {}
 
   login() {
     this.error = '';
@@ -24,17 +26,14 @@ export class LoginComponent {
     this.api.loginCandidate(this.email, this.password).subscribe({
       next: (res: any) => {
         localStorage.setItem('candidate_id', res.candidate_id);
+        localStorage.setItem('user', JSON.stringify({ name: res.name, email: res.email }));
         localStorage.setItem('token', res.token);
+        this.auth.setUser({ name: res.name, email: res.email });
+        this.toast.show('success', res.message);
         this.router.navigate(['/home']); 
-
-        // if (res.status === 'in_progress') {
-        //   this.router.navigate(['/interview']);
-        // } else {
-        //   this.router.navigate(['/feedback']);
-        // }
       },
       error: err => {
-        this.error = err.error?.error || 'Login failed';
+        this.toast.show('error', err.error?.error);
       }
     });
   }

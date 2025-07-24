@@ -9,8 +9,13 @@
 
   <textarea [(ngModel)]="userAnswer" placeholder="Type your answer here..."></textarea>
 
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+  <!-- <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div> -->
+  <!-- <div *ngIf="successMessage" class="success">{{ successMessage }}</div> -->
 
-  <button class="btn-submit" (click)="submitAnswer()">Submit Answer</button>
+  <button class="btn-submit" (click)="submitAnswer()" [disabled]="loading">
+    <ng-container *ngIf="!loading; else loadingTpl">Submit Answer</ng-container>
+    <ng-template #loadingTpl>
+      <span class="spinner"></span> Submitting...
+    </ng-template>
+  </button>
 </div>
