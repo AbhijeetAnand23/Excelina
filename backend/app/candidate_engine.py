@@ -30,6 +30,7 @@ def register_candidate(name, email, role, password):
         "allowed_levels": level_range[role],
         "interview_progress": [],
         "eliminated_at_level": None,
+        "warnings": 0,
         "status": "registered"
     }
 

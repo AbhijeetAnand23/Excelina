@@ -107,6 +107,12 @@
     border: 1px solid #81d4fa;
   }
 
+  &.disqualified {
+  background-color: #f3e5f5; // soft purple
+  color: #6a1b9a;            // dark purple
+  border: 1px solid #ce93d8;
+  }
+
   span {
     margin-left: 0.5rem;
     font-weight: normal;

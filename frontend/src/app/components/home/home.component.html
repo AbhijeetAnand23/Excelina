@@ -9,6 +9,10 @@
     ❌ You were eliminated at level {{ eliminatedLevel }}.
   </div>
 
+  <div class="status-card disqualified" *ngIf="status === 'disqualified'">
+    ⛔ You have been disqualified due to repeated inappropriate answers. You cannot proceed further.
+  </div>
+
   <div class="status-card in_progress" *ngIf="status === 'in_progress'">
     ✅ On-going Level: {{ currentLevel }}
     <span *ngIf="totalScore !== null">| Last Round Score: {{ totalScore }} / 100</span>

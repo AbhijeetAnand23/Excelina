@@ -5,7 +5,7 @@ from pymongo import MongoClient, errors
 import os
 import jwt
 import bcrypt 
-from app.answer_engine import evaluate_answer
+from app.answer_engine import evaluate_answer, contains_cuss_words
 from app.interview_engine import assign_round_questions, check_and_update_round_status
 from data.db import candidates_collection
 from app.candidate_engine import register_candidate as register_new_candidate
@@ -56,10 +56,21 @@ def start_round(candidate_id):
         return jsonify({"error": "round and level are required."}), 400
 
     try:
+        candidate = candidates_collection.find_one({"_id": ObjectId(candidate_id)})
+        if not candidate:
+            return jsonify({"error": "Candidate not found."}), 404
+
+        if candidate.get("status") == "disqualified":
+            return jsonify({
+                "error": "You are disqualified and cannot start a new round."
+            }), 403
+
         assign_round_questions(candidate_id, round_num, level)
         return jsonify({"message": f"Round {round_num} questions assigned for level {level}."})
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route("/submit-answer", methods=["POST"])
 @token_required
@@ -73,8 +84,36 @@ def submit_answer(candidate_id):
 
     try:
         candidate = candidates_collection.find_one({"_id": ObjectId(candidate_id)})
+
+        if candidate.get("status") == "disqualified":
+            return jsonify({
+                "error": "Your access has been blocked due to repeated inappropriate behavior."
+            }), 403
+
         if not candidate:
             raise ValueError("Candidate not found")
+
+        if contains_cuss_words(user_answer):
+            warnings = candidate.get("warnings", 0) + 1
+            update_fields = {"warnings": warnings}
+
+            if warnings >= 3:
+                update_fields["status"] = "disqualified"
+
+            candidates_collection.update_one(
+                {"_id": ObjectId(candidate_id)},
+                {"$set": update_fields}
+            )
+
+            if warnings >= 3:
+                return jsonify({
+                    "error": "You have been disqualified due to repeated inappropriate answers."
+                }), 403
+
+            return jsonify({
+                "error": f"Inappropriate language detected. This is warning {warnings} of 3."
+            }), 422
+
 
         found = False
         for round_data in candidate.get("interview_progress", []):

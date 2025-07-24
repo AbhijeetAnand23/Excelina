@@ -91,9 +91,19 @@ export class InterviewComponent implements OnInit {
           });
         }
       },
-      error: () => {
+      error: (err) => {
         this.loading = false;
-        this.toast.show('error', 'Something went wrong. Please try again after a few seconds.');
+
+        if (err.status === 422) {
+          this.toast.show('error', err.error?.error || 'Your answer was not accepted due to inappropriate content.');
+        } 
+        else if (err.status === 403) {
+          this.toast.show('error', 'Your access has been blocked due to repeated inappropriate behavior.');
+          this.router.navigate(['/home']);
+        } 
+        else {
+          this.toast.show('error', 'Something went wrong. Please try again after a few seconds.');
+        }
       }
     });
   }

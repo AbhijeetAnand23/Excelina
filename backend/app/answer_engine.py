@@ -96,3 +96,11 @@ def evaluate_answer(candidate_id: str, question_id: str, user_answer: str):
 
     if not found:
         raise ValueError("Question ID not found in candidate's interview progress.")
+
+def contains_cuss_words(text: str) -> bool:
+    prompt = f"""Check if the following text contains any cuss words, profanity, or inappropriate language. Just respond with "Yes" or "No".
+
+Text: "{text}"
+"""
+    response = hf_llm.generate(prompt).strip().lower()
+    return "yes" in response
