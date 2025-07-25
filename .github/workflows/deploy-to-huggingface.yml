@@ -22,10 +22,11 @@ jobs:
           # Clone Hugging Face repo
           git clone https://AbhijeetAnand30:${HF_TOKEN}@huggingface.co/spaces/AbhijeetAnand30/excelina-backend hf_space
 
-          # Sync only the backend folder
-          rsync -av --delete backend/ hf_space/
+          # Sync only the backend folder, excluding the .git directory
+          rsync -av --delete --exclude='.git/' backend/ hf_space/
 
           cd hf_space
+
           git add .
           git commit -m "CI: Sync from GitHub backend folder" || echo "No changes to commit"
 
