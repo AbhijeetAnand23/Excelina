@@ -35,7 +35,9 @@ export class HomeComponent implements OnInit {
     this.api.getCandidateStatus().subscribe({
       next: (res: any) => {
         this.status = res.status;
-        this.currentLevel = res.current_level;
+
+        this.currentLevel = res.start_level;
+
         this.eliminatedLevel = res.eliminated_at_level;
         this.totalScore = res.total_score;
         this.incompleteRound = res.incomplete_round;

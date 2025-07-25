@@ -214,7 +214,8 @@ def candidate_status(candidate_id):
         "current_level": current_level,
         "total_score": round(total_score, 2) if total_score is not None else None,
         "incomplete_round": incomplete_round,
-        "interview_progress": safe_progress  # ✅ Safe for JSON
+        "interview_progress": safe_progress,
+        "start_level": allowed_levels[0]
     })
 
 @app.route("/login-candidate", methods=["POST"])

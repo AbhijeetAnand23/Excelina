@@ -28,6 +28,8 @@ export class NavbarComponent implements OnInit {
   logout(): void {
     localStorage.removeItem('candidate_id');
     this.auth.clearUser();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => {
+      location.reload(); 
+    });
   }
 }
