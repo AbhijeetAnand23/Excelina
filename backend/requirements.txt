@@ -1,0 +1,9 @@
+flask
+flask-cors
+pymongo
+python-dotenv
+bcrypt
+pyjwt
+requests
+reportlab
+deepeval
