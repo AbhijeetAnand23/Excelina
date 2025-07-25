@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:7860'
+  apiUrl: 'https://abhijeetanand30-excelina-backend.hf.space'
 };

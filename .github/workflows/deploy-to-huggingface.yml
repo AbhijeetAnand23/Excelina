@@ -1,0 +1,31 @@
+name: Deploy to Hugging Face Space
+
+on:
+  push:
+    branches:
+      - main  # change this if your branch is named differently
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v3
+
+      - name: Push backend folder to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "your@email.com"
+          git config --global user.name "Your Name"
+
+          # Clone Hugging Face Space repo
+          git clone https://AbhijeetAnand30:${HF_TOKEN}@huggingface.co/spaces/AbhijeetAnand30/excelina-backend hf_space
+
+          # Sync ONLY the backend folder content
+          rsync -av --delete backend/ hf_space/
+
+          cd hf_space
+          git add .
+          git commit -m "CI: Sync from GitHub backend folder" || echo "No changes to commit"
+          git push

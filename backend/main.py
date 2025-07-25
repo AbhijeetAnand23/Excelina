@@ -20,6 +20,10 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/")
+def index():
+    return "✅ Excelina backend is live."
+
 @app.route("/register-candidate", methods=["POST"])
 def register_candidate():
     data = request.json
@@ -304,4 +308,4 @@ def download_report(candidate_id):
     return send_file(buffer, as_attachment=True, download_name="interview_report.pdf", mimetype="application/pdf")
 
 if __name__ == "__main__":
-    app.run(debug=True, port=7860)
+    app.run(host="0.0.0.0", port=7860, debug=True)
