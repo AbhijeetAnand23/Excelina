@@ -3,27 +3,30 @@ name: Deploy to Hugging Face Space
 on:
   push:
     branches:
-      - main  # Trigger when pushing to main branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout GitHub repository
+      - name: Checkout your repo
         uses: actions/checkout@v3
-
-      - name: Configure Git
-        run: |
-          git config --global user.email "your@email.com"
-          git config --global user.name "Your Name"
 
       - name: Push backend folder to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+
           git clone https://AbhijeetAnand30:${HF_TOKEN}@huggingface.co/spaces/AbhijeetAnand30/excelina-backend hf_space
+
           rsync -av --delete backend/ hf_space/
+
           cd hf_space
           git add .
           git commit -m "CI: Sync from GitHub backend folder" || echo "No changes to commit"
-          git push https://AbhijeetAnand30:${HF_TOKEN}@huggingface.co/spaces/AbhijeetAnand30/excelina-backend main
+          
+          # NEW: Pull first to avoid push conflict
+          git pull --rebase origin main
+          git push origin main
