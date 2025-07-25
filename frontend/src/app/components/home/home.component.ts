@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     console.log('✅ Home component loaded');
     if (!this.candidateId) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/register']);
       return;
     }
 
