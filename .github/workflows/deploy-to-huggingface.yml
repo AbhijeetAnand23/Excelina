@@ -1,18 +1,32 @@
-- name: Push backend folder to Hugging Face Space
-  env:
-    HF_TOKEN: ${{ secrets.HF_TOKEN }}
-    GH_PAT: ${{ secrets.GH_PAT }}
-  run: |
-    git config --global user.email "you@example.com"
-    git config --global user.name "Your Name"
+name: Deploy to Hugging Face Space
 
-    # Clone Hugging Face Space
-    git clone https://AbhijeetAnand30:${HF_TOKEN}@huggingface.co/spaces/AbhijeetAnand30/excelina-backend hf_space
+on:
+  push:
+    branches:
+      - main  # or your branch name
 
-    # Sync backend content
-    rsync -av --delete backend/ hf_space/
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v3
 
-    cd hf_space
-    git add .
-    git commit -m "CI: Sync from GitHub backend folder" || echo "No changes to commit"
-    git push origin main
+      - name: Push backend folder to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+
+          # Clone Hugging Face Space
+          git clone https://AbhijeetAnand30:${HF_TOKEN}@huggingface.co/spaces/AbhijeetAnand30/excelina-backend hf_space
+
+          # Sync backend content
+          rsync -av --delete backend/ hf_space/
+
+          cd hf_space
+          git add .
+          git commit -m "CI: Sync from GitHub backend folder" || echo "No changes to commit"
+          git push origin main

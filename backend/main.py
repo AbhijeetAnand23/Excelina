@@ -310,4 +310,4 @@ def download_report(candidate_id):
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7860, debug=True)
 
-# testing CI\CD pipeline for hugging face
+# testing CI\CD pipeline for hugging face Spaces
