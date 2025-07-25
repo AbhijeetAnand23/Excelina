@@ -19,14 +19,18 @@ jobs:
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
 
+          # Clone Hugging Face repo
           git clone https://AbhijeetAnand30:${HF_TOKEN}@huggingface.co/spaces/AbhijeetAnand30/excelina-backend hf_space
 
+          # Sync only the backend folder
           rsync -av --delete backend/ hf_space/
 
           cd hf_space
           git add .
           git commit -m "CI: Sync from GitHub backend folder" || echo "No changes to commit"
-          
-          # NEW: Pull first to avoid push conflict
+
+          # Pull to avoid non-fast-forward push errors
           git pull --rebase origin main
-          git push origin main
+
+          # Push to Hugging Face repo
+          git push https://AbhijeetAnand30:${HF_TOKEN}@huggingface.co/spaces/AbhijeetAnand30/excelina-backend main
