@@ -1,5 +1,15 @@
 <div class="home-container">
   <h2>Welcome to the Excel Interviewer</h2>
+  <div class="app-intro" *ngIf="status === 'registered'">
+    <h3>🧠 Welcome to Excel Interviewer</h3>
+    <p>🚀 This intelligent platform simulates a real interview experience with multiple levels of Excel-based problem-solving tasks. Each round is:</p>
+
+    <div class="intro-point">Focused on core Excel skills — formulas, data analysis, logical reasoning, and automation.</div>
+    <div class="intro-point">Evaluated in real-time using state-of-the-art AI models (like LLaMA) for accuracy, structure, and depth.</div>
+    <div class="intro-point">Followed by AI-generated personalized feedback to help you improve.</div>
+    <div class="intro-point">You'll progress through increasing levels of difficulty. Complete each level with a minimum score to advance. But watch out — inappropriate or incomplete answers may lead to disqualification.</div>
+    <div class="intro-point">Ready to level up your Excel game?</div>
+  </div>
 
   <div class="status-card completed" *ngIf="status === 'completed'">
     🎉 Congratulations! You have completed all levels.
@@ -14,8 +24,20 @@
   </div>
 
   <div class="status-card in_progress" *ngIf="status === 'in_progress'">
-    ✅ On-going Level: {{ currentLevel }}
-    <span *ngIf="totalScore !== null">| Last Round Score: {{ totalScore }} / 100</span>
+    <ng-container *ngIf="isCurrentLevelPassed(); else ongoing">
+      🎯 Round {{ currentLevel }} Completed | Score: {{ totalScore }} / {{ maxMarksPerRound }}
+    </ng-container>
+
+    <ng-template #ongoing>
+      ✅ On-going Level: {{ currentLevel }}
+      <span *ngIf="totalScore !== null">| Last Round Score: {{ totalScore }} / {{ maxMarksPerRound }}</span>
+      <div>
+        🔄 Round Status: 
+        <strong [ngClass]="{ 'text-success': isCurrentLevelCompleted(), 'text-danger': !isCurrentLevelCompleted() }">
+          {{ isCurrentLevelCompleted() ? 'Completed' : 'In Progress' }}
+        </strong>
+      </div>
+    </ng-template>
   </div>
 
   <div *ngIf="status === 'registered' || status === 'in_progress'" class="actions">

@@ -42,8 +42,16 @@
       <p>🎉 You have successfully completed all levels!</p>
     </div>
     <div class="button-container">
-      <button class="btn" (click)="downloadReport()">Download PDF Report</button>
-      <button class="btn" (click)="goHome()">Back to Home</button>
+      <!-- Show both buttons when not in_progress -->
+      <ng-container *ngIf="status !== 'in_progress'; else inProgressButtons">
+        <button class="btn" (click)="downloadReport()">Download PDF Report</button>
+        <button class="btn" (click)="goHome()">Back to Home</button>
+      </ng-container>
+
+      <!-- Show only Go Home when in_progress -->
+      <ng-template #inProgressButtons>
+        <button class="btn" (click)="goHome()">Back to Home</button>
+      </ng-template>
     </div>
 
   </div>

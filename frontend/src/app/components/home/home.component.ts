@@ -19,6 +19,8 @@ export class HomeComponent implements OnInit {
   loading = false;
   message = '';
   incompleteRound = false;
+  interviewProgress: any = {};
+  maxMarksPerRound = 60;
 
 
   constructor(private api: ApiService, private router: Router) {}
@@ -36,7 +38,8 @@ export class HomeComponent implements OnInit {
         this.currentLevel = res.current_level;
         this.eliminatedLevel = res.eliminated_at_level;
         this.totalScore = res.total_score;
-        this.incompleteRound = res.incomplete_round; // 👈
+        this.incompleteRound = res.incomplete_round;
+        this.interviewProgress = res.interview_progress || {};
       },
       error: () => {
         this.message = 'Error fetching candidate status.';
@@ -68,5 +71,17 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  isCurrentLevelCompleted(): boolean {
+    if (!this.currentLevel || !this.interviewProgress) return false;
+    const progress = this.interviewProgress[this.currentLevel - 1];
+    console.log(progress)
+    console.log(progress?.completed === true)
+    return progress?.completed === true;
+  }
 
+  isCurrentLevelPassed(): boolean {
+    if (!this.currentLevel || !this.interviewProgress) return false;
+    const progress = this.interviewProgress[this.currentLevel - 1];
+    return progress?.completed === true && progress?.passed === true;
+  }
 }

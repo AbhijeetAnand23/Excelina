@@ -33,7 +33,7 @@ export class FeedbackComponent implements OnInit {
       this.totalScore = res.total_score;
       this.currentLevel = res.current_level;
       this.eliminatedLevel = res.eliminated_at_level;
-      this.maxScoreAllLevels = res.current_level * 100;
+      this.maxScoreAllLevels = res.current_level * 60;
     });
 
     this.api.getQuestions(this.candidateId).subscribe((res: any[]) => {

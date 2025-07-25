@@ -9,7 +9,7 @@ from app.interview_engine import assign_round_questions, check_and_update_round_
 from data.db import candidates_collection
 from app.candidate_engine import register_candidate as register_new_candidate
 from bson.objectid import ObjectId
-from app.utils import token_required
+from app.utils import token_required, convert_objectids
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet
@@ -201,12 +201,16 @@ def candidate_status(candidate_id):
         if any(q.get("score") is None for q in questions):
             incomplete_round = True
 
+    # 🔁 Convert ObjectIds in progress
+    safe_progress = convert_objectids(progress)
+
     return jsonify({
         "status": candidate.get("status"),
         "eliminated_at_level": eliminated_level,
         "current_level": current_level,
         "total_score": round(total_score, 2) if total_score is not None else None,
-        "incomplete_round": incomplete_round  # 👈 add this
+        "incomplete_round": incomplete_round,
+        "interview_progress": safe_progress  # ✅ Safe for JSON
     })
 
 @app.route("/login-candidate", methods=["POST"])

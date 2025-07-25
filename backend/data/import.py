@@ -1,7 +1,7 @@
 import json
 from db import seed_collection
 
-with open("data/questions.json", "r", encoding="utf-8") as f:
+with open("backend/data/questions.json", "r", encoding="utf-8") as f:
     questions = json.load(f)
 
 # Optional: Clear existing

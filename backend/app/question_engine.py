@@ -17,7 +17,7 @@ def load_questions():
     return list(seed_collection.find({"status": "active"}))
 
 # Randomly fetch N questions of a given level from MongoDB
-def get_questions_by_level(level, n=10):
+def get_questions_by_level(level, n=6):
     return list(seed_collection.aggregate([
         {"$match": {"level": level, "status": "active"}},
         {"$sample": {"size": n}}
@@ -25,7 +25,6 @@ def get_questions_by_level(level, n=10):
 
 # Use LLM to generate modified question + reference + follow-up
 def generate_variant_with_llm(seed_question, seed_reference_answer, seed_followup):
-    print("Original Question →", seed_question)
     prompt = f"""You are an AI interviewer. Slightly modify the Excel question below (same topic and difficulty). Then write an updated reference answer and a follow-up question.
 
 Original Question: {seed_question}
@@ -59,10 +58,11 @@ Followup: <updated follow-up question>
     except:
         new_q, new_ref, new_followup = seed_question, seed_reference_answer, seed_followup
 
+    print("New Answer →", new_ref)
     return new_q, new_ref, new_followup
 
 # Generate N new questions with reference answers & follow-ups for a candidate
-def generate_candidate_questions(level, n=10):
+def generate_candidate_questions(level, n=6):
     seed_questions = get_questions_by_level(level, n)
     final_questions = []
 
