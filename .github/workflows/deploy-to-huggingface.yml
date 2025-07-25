@@ -28,4 +28,3 @@ jobs:
           cd hf_space
           git add .
           git commit -m "CI: Sync from GitHub backend folder" || echo "No changes to commit"
-          git push
